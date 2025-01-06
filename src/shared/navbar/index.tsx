@@ -10,7 +10,7 @@ export default function Navbar() {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex flex-col sm:flex-row max-w-48 sm:max-w-full justify-around gap-8">
+      <div className="flex flex-col sm:flex-row max-w-48 sm:max-w-full justify-around sm:gap-8">
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full shadow-lg mt-4"
         >

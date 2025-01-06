@@ -1,0 +1,17 @@
+import React from 'react'
+
+function Footer() {
+  return (
+    <div>
+    <footer className="mt-auto text-white">
+    <p>
+      © {new Date().getFullYear()} MrBeast Games. All rights reserved.
+      <br />
+      This is a Beast Games fan site and is not affiliated with MrBeast or Beast Games.
+    </p>
+  </footer>
+  </div>
+  )
+}
+
+export default Footer
