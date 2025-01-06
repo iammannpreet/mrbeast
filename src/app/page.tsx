@@ -9,7 +9,9 @@ export default function Home() {
      <Navbar />
    <Landing />
      <Offer />
+     <div className='pt-24'>
 <Footer />
+</div>
     </main>
   );
 }
