@@ -16,10 +16,10 @@ function KnowThem() {
 
   // Dummy data for carousel items
   const cards = [
-    { id: 1, image: "/chandler.webp", title: "Chandler", description: "Brief description of Item 1." },
-    { id: 2, image: "/jimm.webp", title: "Jimmy", description: "Brief description of Item 2." },
-    { id: 3, image: "/karl.jpeg", title: "Karl", description: "Brief description of Item 3." },
-    { id: 4, image: "/kris.webp", title: "Ava Kris", description: "Brief description of Item 4." },
+    { id: 1, image: "/images/chandler.webp", title: "Chandler", description: "Brief description of Item 1." },
+    { id: 2, image: "/images/jimm.webp", title: "Jimmy", description: "Brief description of Item 2." },
+    { id: 3, image: "/images/karl.jpeg", title: "Karl", description: "Brief description of Item 3." },
+    { id: 4, image: "/images/kris.webp", title: "Ava Kris", description: "Brief description of Item 4." },
   ];
 
   useEffect(() => {
@@ -42,9 +42,9 @@ function KnowThem() {
   }, []);
 
   return (
-    <div className="max-w-[1200px] mx-auto px-4 py-8 text-center">
+    <div className="max-w-[1400px] mx-auto px-4 py-8 text-center">
       {/* Header Section */}
-      <div className="mt-8 items-center flex flex-col justify-center">
+      <div className="md:hidden mt-8 items-center flex flex-col justify-center">
         <h1 ref={headingRef} className="text-3xl font-semibold text-black">
           Mr Beast Games
         </h1>
@@ -57,9 +57,9 @@ function KnowThem() {
           and a role model for many people around the world.
         </p>
       </div>
-
+<div></div>
       {/* Swiper Carousel Section */}
-      <div className="mt-12">
+      <div className="max-w-5xl mx-auto mt-8">
         <h2 className="text-2xl font-medium text-black mb-6">
           Random Facts About These Guys
         </h2>

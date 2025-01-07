@@ -9,12 +9,10 @@ export default function Home() {
   return (
     <main className="bg-gradient-to-r from-yellow-400 to-orange-500 min-h-screen">
      <Navbar />
-   <Landing />
+   <Landing /> <Offer />
    <KnowThem />
-     <Offer />
-     <div className='pt-24'>
+    
 <Footer />
-</div>
     </main>
   );
 }

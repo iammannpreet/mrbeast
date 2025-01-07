@@ -43,7 +43,7 @@ function Landing() {
   }, []);
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-center text-center mt-8 lg:gap-[16rem]">
+    <div className="flex flex-col sm:flex-row items-center justify-center text-center mt-8 lg:gap-[15rem]">
       {/* Logo Section */}
       <Image
         ref={logoRef}
@@ -54,17 +54,11 @@ function Landing() {
         className="rounded-full"
       />
       <div className="flex flex-col items-center">
-        <h1
-          ref={textRef}
-          className="text-4xl font-bold text-white mt-6"
-        >
+        <h1 ref={textRef} className="text-4xl font-bold text-white mt-6">
           Welcome to MrBeast Fan Games
         </h1>
         <div className="max-w-[400px]">
-          <p
-            ref={textRef}
-            className="text-lg text-white mt-4"
-          >
+          <p ref={textRef} className="text-lg text-white mt-4">
             Think you’ve got what it takes? Dive into epic challenges, make
             predictions, and prove you're the ultimate MrBeast fan.
           </p>

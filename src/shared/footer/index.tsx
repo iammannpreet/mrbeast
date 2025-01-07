@@ -2,7 +2,7 @@ import React from 'react'
 
 function Footer() {
   return (
-    <div className='items-center justify-center text-center mt-8'>
+    <div className='p-2 items-center justify-center text-center '>
     <footer className="mt-auto text-white">
     <p>
       © {new Date().getFullYear()} MrBeast Games. All rights reserved.
