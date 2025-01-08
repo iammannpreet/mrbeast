@@ -8,10 +8,10 @@ import { Autoplay, Navigation, EffectCoverflow } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import styles from "./ShareIdeasPage.module.css";
+import styles from "./ShareIdeasPage.module.css"; // Updated with provided CSS
 
 const ShareIdeasPage: React.FC = () => {
-  const [stories, setStories] = useState([
+  const [stories] = useState([
     {
       id: 1,
       user: "John Doe",
@@ -27,18 +27,18 @@ const ShareIdeasPage: React.FC = () => {
       comments: 8,
     },
     {
-      id: 2,
-      user: "Jane Smith",
-      content: "How about a hide-and-seek game in a theme park?",
-      likes: 32,
-      comments: 8,
+      id: 1,
+      user: "John Doe",
+      content: "What if MrBeast did a $1M underwater survival challenge?",
+      likes: 45,
+      comments: 12,
     },
     {
-      id: 2,
-      user: "Jane Smith",
-      content: "How about a hide-and-seek game in a theme park?",
-      likes: 32,
-      comments: 8,
+      id: 1,
+      user: "John Doe",
+      content: "What if MrBeast did a $1M underwater survival challenge?",
+      likes: 45,
+      comments: 12,
     },
     {
       id: 3,
@@ -48,22 +48,6 @@ const ShareIdeasPage: React.FC = () => {
       comments: 18,
     },
   ]);
-
-  const handleLike = (id: number) => {
-    setStories((prevStories) =>
-      prevStories.map((story) =>
-        story.id === id ? { ...story, likes: story.likes + 1 } : story
-      )
-    );
-  };
-
-  const handleReply = (id: number) => {
-    alert(`Reply to story ${id}`);
-  };
-
-  const handleShare = (id: number) => {
-    alert(`Share story ${id}`);
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-yellow-400 to-orange-500">
@@ -88,12 +72,11 @@ const ShareIdeasPage: React.FC = () => {
               stretch: 0,
               depth: 100,
               modifier: 1,
-              slideShadows: true,
+              slideShadows: false,
             }}
-            className="swiper-wrapper"
           >
             {stories.map(({ id, user, content, likes, comments }) => (
-              <SwiperSlide key={id} className={styles.swiperSlide}>
+              <SwiperSlide key={id}>
                 <div className="p-6 bg-white shadow-lg rounded-lg flex flex-col space-y-3">
                   <div className="text-gray-700 font-semibold text-lg">
                     {user}
