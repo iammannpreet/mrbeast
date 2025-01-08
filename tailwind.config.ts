@@ -10,6 +10,9 @@ export default {
   
   theme: {
     extend: {
+      screens: {
+      'xs': '480px', // Extra small devices
+    },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
