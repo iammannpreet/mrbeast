@@ -7,12 +7,12 @@ export default {
     "./src/shared/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  
+
   theme: {
     extend: {
       screens: {
-      'xs': '480px', // Extra small devices
-    },
+        xs: "480px", // Extra small devices
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",

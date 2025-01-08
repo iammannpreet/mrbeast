@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Dialog from "../ui/Dialog";
 import { Button } from "../ui/Button";
 import QuizGame from "../quizgame";
@@ -8,7 +9,9 @@ import QuizGame from "../quizgame";
 export default function Navbar() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isQuizOpen, setIsQuizOpen] = useState(false);
-  const [isJoinNowOpen, setIsJoinNowOpen] = useState(false); // State for "Join Now" dialog
+  const [isJoinNowOpen, setIsJoinNowOpen] = useState(false);
+
+  const router = useRouter();
 
   const openDialog = () => setIsDialogOpen(true);
   const closeDialog = () => setIsDialogOpen(false);
@@ -30,6 +33,16 @@ export default function Navbar() {
         {/* "Join Now" Button */}
         <Button variant="red" size="md" shape="pill" onClick={openJoinNow}>
           Join Now
+        </Button>
+
+        {/* "Your Ideas" Button */}
+        <Button
+          variant="green"
+          size="md"
+          shape="pill"
+          onClick={() => router.push("/share-ideas")} // Navigate to the ideas page
+        >
+          Your Ideas
         </Button>
 
         {/* "Learn More" Button */}
