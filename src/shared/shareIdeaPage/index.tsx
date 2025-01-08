@@ -8,7 +8,7 @@ import { Autoplay, Navigation, EffectCoverflow } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import styles from "./ShareIdeasPage.module.css"; // Updated with provided CSS
+import styles from "./ShareIdeasPage.module.css";
 
 const ShareIdeasPage: React.FC = () => {
   const [stories] = useState([
@@ -27,18 +27,18 @@ const ShareIdeasPage: React.FC = () => {
       comments: 8,
     },
     {
-      id: 1,
-      user: "John Doe",
-      content: "What if MrBeast did a $1M underwater survival challenge?",
-      likes: 45,
-      comments: 12,
+      id: 3,
+      user: "Alice Johnson",
+      content: "MrBeast should host a 'Last to Leave the Desert' challenge!",
+      likes: 55,
+      comments: 18,
     },
     {
-      id: 1,
-      user: "John Doe",
-      content: "What if MrBeast did a $1M underwater survival challenge?",
-      likes: 45,
-      comments: 12,
+      id: 3,
+      user: "Alice Johnson",
+      content: "MrBeast should host a 'Last to Leave the Desert' challenge!",
+      likes: 55,
+      comments: 18,
     },
     {
       id: 3,
@@ -66,7 +66,6 @@ const ShareIdeasPage: React.FC = () => {
             loop
             autoplay={{ delay: 2000 }}
             effect={"coverflow"}
-            grabCursor
             coverflowEffect={{
               rotate: 50,
               stretch: 0,
@@ -74,6 +73,8 @@ const ShareIdeasPage: React.FC = () => {
               modifier: 1,
               slideShadows: false,
             }}
+            preventClicks={false}
+            preventClicksPropagation={false}
           >
             {stories.map(({ id, user, content, likes, comments }) => (
               <SwiperSlide key={id}>
@@ -83,14 +84,20 @@ const ShareIdeasPage: React.FC = () => {
                   </div>
                   <div className="text-gray-600">{content}</div>
                   <div className="flex justify-between items-center text-sm text-gray-500">
-                    <div className="flex items-center space-x-1">
+                    <button
+                      className="flex items-center space-x-1 hover:text-blue-500"
+                      onClick={() => alert(`Liked by ${user}`)}
+                    >
                       <span>👍</span>
                       <span>{likes}</span>
-                    </div>
-                    <div className="flex items-center space-x-1">
+                    </button>
+                    <button
+                      className="flex items-center space-x-1 hover:text-blue-500"
+                      onClick={() => alert(`Comment on ${user}'s idea`)}
+                    >
                       <span>💬</span>
                       <span>{comments}</span>
-                    </div>
+                    </button>
                   </div>
                 </div>
               </SwiperSlide>
