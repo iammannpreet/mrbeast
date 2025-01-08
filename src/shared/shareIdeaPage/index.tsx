@@ -27,6 +27,20 @@ const ShareIdeasPage: React.FC = () => {
       comments: 8,
     },
     {
+      id: 2,
+      user: "Jane Smith",
+      content: "How about a hide-and-seek game in a theme park?",
+      likes: 32,
+      comments: 8,
+    },
+    {
+      id: 2,
+      user: "Jane Smith",
+      content: "How about a hide-and-seek game in a theme park?",
+      likes: 32,
+      comments: 8,
+    },
+    {
       id: 3,
       user: "Alice Johnson",
       content: "MrBeast should host a 'Last to Leave the Desert' challenge!",
