@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import MyComponent from "../shareIdea/index";
-
+import Navbar from "../navbar";
 const ShareIdeasPage: React.FC = () => {
   const [stories, setStories] = useState([
     {
@@ -59,6 +59,7 @@ const ShareIdeasPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-yellow-400 to-orange-500">
+      <Navbar />
       {/* Stories Section */}
       <div className="w-full p-6">
         <h2 className="text-3xl font-bold text-white mb-6 text-center">
