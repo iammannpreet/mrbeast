@@ -1,9 +1,15 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import { gsap } from "gsap";
+import React, { useState } from "react";
 import MyComponent from "../shareIdea/index";
 import Navbar from "../navbar";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Navigation, EffectCoverflow } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import styles from "./ShareIdeasPage.module.css";
+
 const ShareIdeasPage: React.FC = () => {
   const [stories, setStories] = useState([
     {
@@ -20,26 +26,14 @@ const ShareIdeasPage: React.FC = () => {
       likes: 32,
       comments: 8,
     },
+    {
+      id: 3,
+      user: "Alice Johnson",
+      content: "MrBeast should host a 'Last to Leave the Desert' challenge!",
+      likes: 55,
+      comments: 18,
+    },
   ]);
-
-  const storyRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    // Ensure the reference is valid before running GSAP animation
-    if (storyRef.current?.children) {
-      gsap.fromTo(
-        Array.from(storyRef.current.children), // Convert HTMLCollection to an array
-        { opacity: 0, y: 20 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          stagger: 0.2,
-          ease: "power2.out",
-        }
-      );
-    }
-  }, [stories]);
 
   const handleLike = (id: number) => {
     setStories((prevStories) =>
@@ -60,47 +54,61 @@ const ShareIdeasPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-r from-yellow-400 to-orange-500">
       <Navbar />
-      {/* Stories Section */}
-      <div className="w-full p-6">
-        <h2 className="text-3xl font-bold text-white mb-6 text-center">
-          Top Stories
-        </h2>
-        <div
-          className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
-          ref={storyRef}
-        >
-          {stories.map((story) => (
-            <div
-              key={story.id}
-              className="p-4 bg-white shadow-lg rounded-lg flex flex-col space-y-3 transform hover:scale-105 transition-transform duration-300"
-            >
-              <div className="text-gray-700 font-semibold">{story.user}</div>
-              <div className="text-gray-600">{story.content}</div>
-              <div className="flex justify-between items-center text-sm text-gray-500">
-                <button
-                  className="flex items-center space-x-1 hover:text-blue-500"
-                  onClick={() => handleLike(story.id)}
-                >
-                  <span>👍</span>
-                  <span>{story.likes}</span>
-                </button>
-                <button
-                  className="hover:text-blue-500"
-                  onClick={() => handleReply(story.id)}
-                >
-                  Reply
-                </button>
-                <button
-                  className="hover:text-blue-500"
-                  onClick={() => handleShare(story.id)}
-                >
-                  Share
-                </button>
-              </div>
-            </div>
-          ))}
+      <section className={styles.features}>
+        <h1 className={styles.blockTitle}>Top Stories</h1>
+        <div className={styles["features--wrap"]}>
+          <Swiper
+            modules={[Autoplay, EffectCoverflow, Navigation]}
+            navigation={{
+              nextEl: ".user-swiper-button-next",
+              prevEl: ".user-swiper-button-prev",
+            }}
+            slidesPerView={3.3}
+            centeredSlides
+            loop
+            autoplay={{ delay: 2000 }}
+            effect={"coverflow"}
+            grabCursor
+            coverflowEffect={{
+              rotate: 50,
+              stretch: 0,
+              depth: 100,
+              modifier: 1,
+              slideShadows: true,
+            }}
+            className="swiper-wrapper"
+          >
+            {stories.map(({ id, user, content, likes, comments }) => (
+              <SwiperSlide key={id} className={styles.swiperSlide}>
+                <div className="p-6 bg-white shadow-lg rounded-lg flex flex-col space-y-3">
+                  <div className="text-gray-700 font-semibold text-lg">
+                    {user}
+                  </div>
+                  <div className="text-gray-600">{content}</div>
+                  <div className="flex justify-between items-center text-sm text-gray-500">
+                    <div className="flex items-center space-x-1">
+                      <span>👍</span>
+                      <span>{likes}</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <span>💬</span>
+                      <span>{comments}</span>
+                    </div>
+                  </div>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+          <div
+            className="swiper-button-prev user-swiper-button-prev"
+            style={{ color: "#000033" }}
+          ></div>
+          <div
+            className="swiper-button-next user-swiper-button-next"
+            style={{ color: "#000033" }}
+          ></div>
         </div>
-      </div>
+      </section>
 
       {/* Idea Submission Section */}
       <div className="w-full p-6 bg-white shadow-md mt-8 rounded-lg">

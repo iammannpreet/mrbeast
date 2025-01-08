@@ -1,0 +1,40 @@
+.features {
+  padding: 2rem;
+  background-color: #ffffff;
+}
+
+.blockTitle {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #333333;
+}
+
+.features--wrap {
+  position: relative;
+}
+
+.swiperSlide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+}
+
+.user-swiper-button-next,
+.user-swiper-button-prev {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.user-swiper-button-prev {
+  left: -30px;
+}
+
+.user-swiper-button-next {
+  right: -30px;
+}
