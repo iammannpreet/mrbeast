@@ -7,8 +7,9 @@ import { Button } from "../ui/Button";
 function Landing() {
   // Create refs for elements you want to animate
   const logoWrapperRef = useRef(null);
-  const textRefs = useRef(null);
-  const textRefs2 = useRef(null);
+  const textRefs = useRef<(HTMLHeadingElement | HTMLParagraphElement | null)[]>(
+    []
+  );
   const buttonRef = useRef(null);
   const buttonTextRef = useRef(null);
 
@@ -66,11 +67,21 @@ function Landing() {
         />
       </div>
       <div className="flex flex-col items-center">
-        <h1 ref={textRefs2} className="text-4xl font-bold text-white mt-6">
+        <h1
+          ref={(el) => {
+            textRefs.current[0] = el;
+          }}
+          className="text-4xl font-bold text-white mt-6"
+        >
           Welcome to MrBeast Fan Games
         </h1>
         <div className="max-w-[400px]">
-          <p ref={textRefs.current} className="text-lg text-white mt-4">
+          <p
+            ref={(el) => {
+              textRefs.current[1] = el;
+            }}
+            className="text-lg text-white mt-4"
+          >
             Think you’ve got what it takes? Dive into epic challenges, make
             predictions, and prove you're the ultimate MrBeast fan.
           </p>
