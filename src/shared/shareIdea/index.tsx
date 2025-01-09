@@ -10,7 +10,16 @@ import "react-quill-new/dist/quill.snow.css";
 function MyComponent() {
   const [value, setValue] = useState("");
 
-  return <ReactQuill theme="snow" value={value} onChange={setValue} />;
+  return (
+    <ReactQuill
+      theme="snow"
+      value={value}
+      onChange={setValue}
+      style={{
+        height: "110px", // Set the height of the component
+      }}
+    />
+  );
 }
 
 export default MyComponent;
