@@ -43,7 +43,17 @@ export default function Navbar() {
           variant="green"
           size="md"
           shape="pill"
-          onClick={() => router.push("/share-ideas")} // Navigate to the ideas page
+          onClick={() => router.push("/share-ideas")}
+        >
+          Your Ideas
+        </Button>
+
+        {/* "Your Ideas" Button */}
+        <Button
+          variant="green"
+          size="md"
+          shape="pill"
+          onClick={() => router.push("/bingo-card")}
         >
           Your Ideas
         </Button>
