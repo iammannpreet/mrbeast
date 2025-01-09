@@ -59,7 +59,7 @@ function Landing() {
       {/* Logo Section */}
       <div ref={logoWrapperRef}>
         <Image
-          src="/mrbeast.webp"
+          src="/mrbeast.png"
           alt="MrBeast Logo"
           width={200}
           height={200}
