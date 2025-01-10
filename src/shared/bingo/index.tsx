@@ -54,7 +54,6 @@ const BingoCard1: React.FC = () => {
   const [bingoGrid, setBingoGrid] = useState<string[][]>([]);
 
   useEffect(() => {
-    // Generate the initial card
     setBingoGrid(generateRandomCard());
   }, []);
 
@@ -77,12 +76,12 @@ const BingoCard1: React.FC = () => {
       <h1 className="mt-4 text-3xl font-bold mb-6 text-blue-600">
         MrBeast Bingo Card
       </h1>
-      <div className="grid grid-cols-5 gap-2 max-w-lg mx-auto">
+      <div className="cards p-8 grid grid-cols-5 gap-2 md:max-w-4xl max-w-2xl mx-auto print:max-w-full">
         {bingoGrid.map((row, rowIndex) =>
           row.map((cell, colIndex) => (
             <div
               key={`${rowIndex}-${colIndex}`}
-              className={`bingo-cell flex items-center justify-center border border-gray-400 bg-white shadow-md rounded-md text-sm font-medium h-20 ${
+              className={`bingo-cell flex items-center justify-center border border-gray-400 bg-white shadow-md rounded-md text-[7pt] md:text-base  md:w-32 md:h-32 w-16 h-16 p-2 text-center break-words ${
                 rowIndex === 2 && colIndex === 2
                   ? "bg-yellow-300 font-bold"
                   : ""
@@ -93,18 +92,41 @@ const BingoCard1: React.FC = () => {
           ))
         )}
       </div>
-      <button
-        onClick={handleGenerateNewCard}
-        className="mt-6 px-6 py-2 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 transition"
-      >
-        Generate New Card
-      </button>
-      <button
-        onClick={() => window.print()}
-        className="mt-4 px-6 py-2 bg-green-500 text-white rounded-lg shadow-lg hover:bg-green-600 transition"
-      >
-        Print Bingo Card
-      </button>
+      <div className="flex flex-col items-center mb-8">
+        <button
+          onClick={handleGenerateNewCard}
+          className="max-w-[12rem] mt-6 px-6 py-2 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 transition"
+        >
+          Generate New Card
+        </button>
+        <button
+          onClick={() => window.print()}
+          className="max-w-[12rem] mt-4 px-6 py-2 bg-green-500 text-white rounded-lg shadow-lg hover:bg-green-600 transition"
+        >
+          Print Bingo Card
+        </button>
+      </div>
+      <style jsx>{`
+        @media print {
+          .navbar,
+          button {
+            display: none;
+          }
+          .cards {
+            margin-top: -10rem;
+            margin-bottom: -10rem;
+            width: 100%;
+          }
+          .bingo-cell {
+            width: 1in;
+            height: 1in;
+            font-size: 10pt;
+          }
+          .grid {
+            gap: 0;
+          }
+        }
+      `}</style>
     </div>
   );
 };
