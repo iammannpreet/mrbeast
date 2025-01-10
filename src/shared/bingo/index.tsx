@@ -98,6 +98,12 @@ const BingoCard1: React.FC = () => {
       >
         Generate New Card
       </button>
+      <button
+        onClick={() => window.print()}
+        className="mt-4 px-6 py-2 bg-green-500 text-white rounded-lg shadow-lg hover:bg-green-600 transition"
+      >
+        Print Card
+      </button>
     </div>
   );
 };

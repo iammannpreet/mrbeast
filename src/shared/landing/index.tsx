@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Button } from "../ui/Button";

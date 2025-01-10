@@ -35,3 +35,24 @@ body {
   font-weight: 700;
   font-style: normal;
 }
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .bingo-cell,
+  .bingo-cell * {
+    visibility: visible;
+  }
+  .grid {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    page-break-inside: avoid;
+  }
+  button,
+  nav,
+  h1 {
+    display: none;
+  }
+}
