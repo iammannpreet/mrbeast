@@ -77,7 +77,7 @@ const BingoCard1: React.FC = () => {
       <h1 className="text-3xl font-bold mb-6 text-blue-600">
         MrBeast Bingo Card
       </h1>
-      <div className="grid grid-cols-5 gap-2 max-w-md mx-auto">
+      <div className="grid grid-cols-5 gap-2 max-w-lg mx-auto">
         {bingoGrid.map((row, rowIndex) =>
           row.map((cell, colIndex) => (
             <div
@@ -98,6 +98,12 @@ const BingoCard1: React.FC = () => {
         className="mt-6 px-6 py-2 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 transition"
       >
         Generate New Card
+      </button>
+      <button
+        onClick={() => window.print()}
+        className="mt-4 px-6 py-2 bg-green-500 text-white rounded-lg shadow-lg hover:bg-green-600 transition"
+      >
+        Print Bingo Card
       </button>
     </div>
   );
