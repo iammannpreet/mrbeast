@@ -48,16 +48,6 @@ export default function Navbar() {
           Your Ideas
         </Button>
 
-        {/* "Your Ideas" Button */}
-        <Button
-          variant="green"
-          size="md"
-          shape="pill"
-          onClick={() => router.push("/bingo-card")}
-        >
-          Your Ideas
-        </Button>
-
         {/* "Learn More" Button */}
         <Button
           variant="outline"

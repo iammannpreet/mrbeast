@@ -1,6 +1,8 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
+
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Button } from "../ui/Button";
 
@@ -10,6 +12,8 @@ function Landing() {
   const textRefs = useRef<(HTMLHeadingElement | HTMLParagraphElement | null)[]>(
     []
   );
+
+  const router = useRouter();
   const buttonRef = useRef(null);
   const buttonTextRef = useRef(null);
 
@@ -96,6 +100,15 @@ function Landing() {
           <span ref={buttonTextRef}>
             <b>Join the Challenge</b>
           </span>
+        </Button>
+        {/* "Your Ideas" Button */}
+        <Button
+          variant="green"
+          size="md"
+          shape="pill"
+          onClick={() => router.push("/bingo-card")}
+        >
+          Create Bingo
         </Button>
       </div>
     </div>

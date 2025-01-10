@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { gsap } from "gsap";
+import Navbar from "../navbar";
 
 const BingoCard1: React.FC = () => {
   const contentPool = [
@@ -53,7 +54,6 @@ const BingoCard1: React.FC = () => {
   const [bingoGrid, setBingoGrid] = useState<string[][]>([]);
 
   useEffect(() => {
-    // Generate the initial card
     setBingoGrid(generateRandomCard());
   }, []);
 
@@ -71,11 +71,12 @@ const BingoCard1: React.FC = () => {
   };
 
   return (
-    <div className="text-center font-sans">
-      <h1 className="text-3xl font-bold mb-6 text-blue-600">
+    <div ref={animateCard} className="text-center font-sans">
+      <Navbar />
+      <h1 className="text-3xl font-bold mb-6 text-blue-600 mt-8">
         MrBeast Bingo Card
       </h1>
-      <div className="grid grid-cols-5 gap-2 max-w-sm mx-auto">
+      <div className="grid grid-cols-5 gap-2 max-w-lg mx-auto">
         {bingoGrid.map((row, rowIndex) =>
           row.map((cell, colIndex) => (
             <div
