@@ -59,7 +59,10 @@ const Merch: React.FC = () => {
   }, []);
 
   return (
-    <div ref={sectionRef} className="py-10 bg-white rounded-lg bg-opacity-80 ">
+    <div
+      ref={sectionRef}
+      className="py-10 mt-8 bg-white rounded-lg bg-opacity-80 "
+    >
       <h2 className="text-4xl font-bold text-center mb-6 text-blue-600">
         Get Your MrBeast Merch!
       </h2>

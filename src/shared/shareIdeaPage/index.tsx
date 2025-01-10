@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MyComponent from "../shareIdea/index";
 import Navbar from "../navbar";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -10,72 +10,90 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import styles from "./ShareIdeasPage.module.css";
 
+interface Story {
+  id: number;
+  user: string;
+  content: string;
+  likes: number;
+  comments: number;
+  commentList?: string[]; // To store actual comments
+}
+
 const ShareIdeasPage: React.FC = () => {
-  const [stories] = useState([
-    {
-      id: 1,
-      user: "John Doe",
-      content: "What if MrBeast did a $1M underwater survival challenge?",
-      likes: 45,
-      comments: 12,
-    },
-    {
-      id: 1,
-      user: "John Doe",
-      content: "What if MrBeast did a $1M underwater survival challenge?",
-      likes: 45,
-      comments: 12,
-    },
-    {
-      id: 1,
-      user: "John Doe",
-      content: "What if MrBeast did a $1M underwater survival challenge?",
-      likes: 45,
-      comments: 12,
-    },
-    {
-      id: 1,
-      user: "John Doe",
-      content: "What if MrBeast did a $1M underwater survival challenge?",
-      likes: 45,
-      comments: 12,
-    },
-    {
-      id: 1,
-      user: "John Doe",
-      content: "What if MrBeast did a $1M underwater survival challenge?",
-      likes: 45,
-      comments: 12,
-    },
-    {
-      id: 2,
-      user: "Jane Smith",
-      content: "How about a hide-and-seek game in a theme park?",
-      likes: 32,
-      comments: 8,
-    },
-    {
-      id: 3,
-      user: "Alice Johnson",
-      content: "MrBeast should host a 'Last to Leave the Desert' challenge!",
-      likes: 55,
-      comments: 18,
-    },
-    {
-      id: 3,
-      user: "Alice Johnson",
-      content: "MrBeast should host a 'Last to Leave the Desert' challenge!",
-      likes: 55,
-      comments: 18,
-    },
-    {
-      id: 3,
-      user: "Alice Johnson",
-      content: "MrBeast should host a 'Last to Leave the Desert' challenge!",
-      likes: 55,
-      comments: 18,
-    },
-  ]);
+  const [stories, setStories] = useState<Story[]>([]);
+
+  // Load existing stories from the JSON file
+  useEffect(() => {
+    fetch("/data/stories.json")
+      .then((res) => res.json())
+      .then((data) => setStories(data))
+      .catch((err) => console.error("Error loading stories:", err));
+  }, []);
+
+  // Handle new story submission
+  const handleNewIdea = (ideaContent: string) => {
+    const newStory: Story = {
+      id: stories.length + 1,
+      user: "Anonymous",
+      content: ideaContent,
+      likes: 0,
+      comments: 0,
+      commentList: [],
+    };
+
+    setStories((prevStories) => [newStory, ...prevStories]);
+
+    fetch("/api/saveStory", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newStory),
+    }).catch((err) => console.error("Failed to save story:", err));
+  };
+
+  // Handle Like Action
+  const handleLike = (id: number) => {
+    const updatedStories = stories.map((story) =>
+      story.id === id ? { ...story, likes: story.likes + 1 } : story
+    );
+
+    setStories(updatedStories);
+
+    // Save updated story to the server
+    const updatedStory = updatedStories.find((story) => story.id === id);
+
+    fetch("/api/saveStory", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedStory),
+    }).catch((err) => console.error("Failed to save like:", err));
+  };
+
+  // Handle Comment Action
+  const handleComment = (id: number) => {
+    const comment = prompt("Enter your comment:");
+    if (comment && comment.trim() !== "") {
+      const updatedStories = stories.map((story) =>
+        story.id === id
+          ? {
+              ...story,
+              comments: story.comments + 1,
+              commentList: [...(story.commentList || []), comment],
+            }
+          : story
+      );
+
+      setStories(updatedStories);
+
+      // Save updated story to the server
+      const updatedStory = updatedStories.find((story) => story.id === id);
+
+      fetch("/api/saveStory", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedStory),
+      }).catch((err) => console.error("Failed to save comment:", err));
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-yellow-400 to-orange-500">
@@ -99,67 +117,67 @@ const ShareIdeasPage: React.FC = () => {
           preventClicks={false}
           preventClicksPropagation={false}
           breakpoints={{
-            480: {
-              slidesPerView: 1.5, // For screens >= xs (480px)
-            },
-            640: {
-              slidesPerView: 1.8, // For screens >= sm (640px)
-            },
-            768: {
-              slidesPerView: 2.5, // For screens >= md (768px)
-            },
-            1024: {
-              slidesPerView: 3.1, // For screens >= lg (1024px)
-            },
-            1280: {
-              slidesPerView: 3.6, // For screens >= xl (1280px)
-            },
-            1536: {
-              slidesPerView: 3.4, // For screens >= 2xl (1536px)
-            },
+            480: { slidesPerView: 1.5 },
+            640: { slidesPerView: 1.8 },
+            768: { slidesPerView: 2.5 },
+            1024: { slidesPerView: 3.1 },
+            1280: { slidesPerView: 3.6 },
+            1536: { slidesPerView: 3.4 },
           }}
         >
-          {stories.map(({ id, user, content, likes, comments }) => (
-            <SwiperSlide key={id} className="flex justify-center">
-              <div className="p-6 bg-white shadow-lg rounded-lg flex flex-col space-y-2 max-w-[18rem] 2xl:max-w-[20rem] h-[20rem]">
-                <div className="text-gray-700 font-semibold text-lg">
-                  {user}
+          {stories.map(
+            ({ id, user, content, likes, comments, commentList }) => (
+              <SwiperSlide key={id} className="flex justify-center">
+                <div className="p-6 bg-white shadow-lg rounded-lg flex flex-col space-y-2 max-w-[18rem] 2xl:max-w-[20rem] h-[20rem] overflow-hidden">
+                  <div className="text-gray-700 font-semibold text-lg">
+                    {user}
+                  </div>
+                  <div
+                    className="text-gray-600 overflow-hidden"
+                    dangerouslySetInnerHTML={{ __html: content }}
+                  />
+                  <div className="flex justify-between items-center text-sm text-gray-500">
+                    {/* 👍 Like Button */}
+                    <button
+                      className="flex items-center space-x-1 hover:text-blue-500"
+                      onClick={() => handleLike(id)}
+                    >
+                      <span>👍</span>
+                      <span>{likes}</span>
+                    </button>
+
+                    {/* 💬 Comment Button */}
+                    <button
+                      className="flex items-center space-x-1 hover:text-blue-500"
+                      onClick={() => handleComment(id)}
+                    >
+                      <span>💬</span>
+                      <span>{comments}</span>
+                    </button>
+                  </div>
+
+                  {/* Display Recent Comments */}
+                  {commentList && commentList.length > 0 && (
+                    <div className="mt-2 text-xs text-gray-600 overflow-y-auto max-h-[60px]">
+                      <strong>Comments:</strong>
+                      {commentList.slice(-3).map((comment, idx) => (
+                        <p key={idx}>- {comment}</p>
+                      ))}
+                    </div>
+                  )}
                 </div>
-                <div className="text-gray-600">{content}</div>
-                <div className="flex justify-between items-center text-sm text-gray-500">
-                  <button
-                    className="flex items-center space-x-1 hover:text-blue-500"
-                    onClick={() => alert(`Liked by ${user}`)}
-                  >
-                    <span>👍</span>
-                    <span>{likes}</span>
-                  </button>
-                  <button
-                    className="flex items-center space-x-1 hover:text-blue-500"
-                    onClick={() => alert(`Comment on ${user}'s idea`)}
-                  >
-                    <span>💬</span>
-                    <span>{comments}</span>
-                  </button>
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
+              </SwiperSlide>
+            )
+          )}
         </Swiper>
       </section>
+
       <div className="items-center flex justify-center">
-        {/* Idea Submission Section */}
         <div className="w-[80%] md:w-1/2 flex flex-col p-6 bg-white shadow-md mt-8 rounded-lg">
           <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
             Share Your Idea
           </h2>
-
-          <MyComponent />
-          <div className="flex justify-center mt-8 sm:mt-0">
-            <button className="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transform hover:scale-105 transition-transform duration-200 mt-16">
-              Submit Idea
-            </button>
-          </div>
+          <MyComponent onSubmit={handleNewIdea} />
         </div>
       </div>
     </div>

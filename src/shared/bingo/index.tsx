@@ -20,7 +20,7 @@ const BingoCard1: React.FC = () => {
 
   // Fetch JSON Data on Load
   useEffect(() => {
-    fetch("/contentPool.json")
+    fetch("/data/contentPool.json")
       .then((response) => response.json())
       .then((data) => {
         setEpisodes(data.episodes);

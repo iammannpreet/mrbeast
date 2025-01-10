@@ -1,0 +1,67 @@
+[
+  {
+    "id": 1,
+    "user": "John Doe",
+    "content": "What if MrBeast did a $1M underwater survival challenge?",
+    "likes": 49,
+    "comments": 3,
+    "commentList": [
+      "This would be epic!",
+      "I can already imagine the underwater base!",
+      "He should invite professional divers!"
+    ]
+  },
+  {
+    "id": 2,
+    "user": "Jane Smith",
+    "content": "How about a hide-and-seek game in a theme park?",
+    "likes": 32,
+    "comments": 2,
+    "commentList": ["That sounds so fun!", "Imagine hiding in roller coasters!"]
+  },
+  {
+    "id": 3,
+    "user": "Alice Johnson",
+    "content": "MrBeast should host a 'Last to Leave the Desert' challenge!",
+    "likes": 57,
+    "comments": 4,
+    "commentList": [
+      "That would be insane!",
+      "How would they survive the heat?",
+      "MrBeast could provide survival kits!",
+      "I'd watch this for sure!"
+    ]
+  },
+  {
+    "id": 4,
+    "user": "Mike Lee",
+    "content": "What if MrBeast bought a private island for a survival challenge?",
+    "likes": 75,
+    "comments": 3,
+    "commentList": [
+      "Didn't he already do something like this?",
+      "He could make it even bigger!",
+      "Imagine the treasure hunts!"
+    ]
+  },
+  {
+    "id": 5,
+    "user": "Sarah Kim",
+    "content": "How about building the world's largest Lego tower?",
+    "likes": 40,
+    "comments": 2,
+    "commentList": ["That's a great idea!", "What if it falls over?"]
+  },
+  {
+    "id": 6,
+    "user": "Anonymous",
+    "content": "A global scavenger hunt sponsored by MrBeast!",
+    "likes": 60,
+    "comments": 3,
+    "commentList": [
+      "Wow, this could be huge!",
+      "Imagine the prizes!",
+      "I'd definitely participate!"
+    ]
+  }
+]
