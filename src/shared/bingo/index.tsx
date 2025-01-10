@@ -170,6 +170,27 @@ const BingoCard1: React.FC = () => {
           Print Bingo Card
         </button>
       </div>
+      <style jsx>{`
+        @media print {
+          .navbar,
+          button {
+            display: none;
+          }
+          .cards {
+            margin-top: -10rem;
+            margin-bottom: -10rem;
+            width: 100%;
+          }
+          .bingo-cell {
+            width: 1in;
+            height: 1in;
+            font-size: 10pt;
+          }
+          .grid {
+            gap: 0;
+          }
+        }
+      `}</style>
     </div>
   );
 };
