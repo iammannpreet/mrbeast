@@ -4,36 +4,37 @@ import React, { useEffect, useState, useRef } from "react";
 import { gsap } from "gsap";
 import Navbar from "../navbar";
 
-const BingoCard1: React.FC = () => {
-  const contentPool = [
-    "Team Trees",
-    "Squid Game",
-    "$10,000 Giveaway",
-    "Beast Burger",
-    "Philanthropy",
-    "24-Hour Challenge",
-    "Feastables",
-    "Chocolate Factory",
-    "100 Million Subs",
-    "Custom Tesla",
-    "Hide and Seek",
-    "Last to Leave",
-    "Charity Donation",
-    "Extreme Stunts",
-    "Island Giveaway",
-    "Gaming Channel",
-    "Beast Reacts",
-    "Limited Merch",
-    "Surprise Guest",
-    "1 Million Dollars",
-    "Prank Video",
-    "World Record",
-    "MrBeast Team",
-    "Beast Philanthropy",
-  ];
+interface Episode {
+  episode_number: number;
+  title: string;
+  release_date: string;
+  events: string[];
+}
 
-  const generateRandomCard = () => {
+const BingoCard1: React.FC = () => {
+  const [episodes, setEpisodes] = useState<Episode[]>([]);
+  const [selectedEpisode, setSelectedEpisode] = useState<number>(1);
+  const [bingoGrid, setBingoGrid] = useState<string[][]>([]);
+  const [isEditMode, setIsEditMode] = useState<boolean>(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  // Fetch JSON Data on Load
+  useEffect(() => {
+    fetch("/contentPool.json")
+      .then((response) => response.json())
+      .then((data) => {
+        setEpisodes(data.episodes);
+        // Generate a random card for the default selected episode
+        setBingoGrid(generateRandomCard(data.episodes[0].events));
+      })
+      .catch((error) => console.error("Error loading JSON:", error));
+  }, []);
+
+  // Generate Random Bingo Card with Unique 24 Events + Free Space
+  const generateRandomCard = (contentPool: string[]) => {
     const shuffledContent = [...contentPool].sort(() => Math.random() - 0.5);
+    const selectedEvents = shuffledContent.slice(0, 24); // Pick 24 unique events
+
     const grid = Array(5)
       .fill(null)
       .map(() => Array(5).fill(null));
@@ -44,21 +45,14 @@ const BingoCard1: React.FC = () => {
         if (row === 2 && col === 2) {
           grid[row][col] = "Free Space";
         } else {
-          grid[row][col] = shuffledContent[index++];
+          grid[row][col] = selectedEvents[index++];
         }
       }
     }
     return grid;
   };
 
-  const [bingoGrid, setBingoGrid] = useState<string[][]>([]);
-  const [isEditMode, setIsEditMode] = useState<boolean>(false);
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setBingoGrid(generateRandomCard());
-  }, []);
-
+  // Animate Card on Update
   const animateCard = () => {
     if (!isEditMode && cardRef.current) {
       gsap.fromTo(
@@ -69,11 +63,30 @@ const BingoCard1: React.FC = () => {
     }
   };
 
-  const handleGenerateNewCard = () => {
-    setBingoGrid(generateRandomCard());
-    animateCard();
+  // Handle Episode Selection Change
+  const handleEpisodeChange = (episodeNumber: number) => {
+    setSelectedEpisode(episodeNumber);
+    const selectedEvents = episodes.find(
+      (ep) => ep.episode_number === episodeNumber
+    )?.events;
+    if (selectedEvents) {
+      setBingoGrid(generateRandomCard(selectedEvents));
+      animateCard();
+    }
   };
 
+  // Handle Manual Card Generation
+  const handleGenerateNewCard = () => {
+    const selectedEvents = episodes.find(
+      (ep) => ep.episode_number === selectedEpisode
+    )?.events;
+    if (selectedEvents) {
+      setBingoGrid(generateRandomCard(selectedEvents));
+      animateCard();
+    }
+  };
+
+  // Handle Cell Editing
   const handleCellChange = (
     value: string,
     rowIndex: number,
@@ -90,12 +103,30 @@ const BingoCard1: React.FC = () => {
       <h1 className="mt-4 text-3xl font-bold mb-6 text-blue-600">
         MrBeast Bingo Card
       </h1>
+
+      {/* Episode Selector */}
+      <div className="mb-4">
+        <label className="mr-2 font-semibold">Select Episode:</label>
+        <select
+          value={selectedEpisode}
+          onChange={(e) => handleEpisodeChange(Number(e.target.value))}
+          className="p-2 border rounded"
+        >
+          {episodes.map((episode) => (
+            <option key={episode.episode_number} value={episode.episode_number}>
+              Episode {episode.episode_number}: {episode.title}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Bingo Card */}
       <div className="cards p-8 grid grid-cols-5 gap-2 md:max-w-4xl max-w-2xl mx-auto print:max-w-full">
         {bingoGrid.map((row, rowIndex) =>
           row.map((cell, colIndex) => (
             <div
               key={`${rowIndex}-${colIndex}`}
-              className={`bingo-cell flex items-center justify-center border border-gray-400 bg-white shadow-md rounded-md text-[7pt] md:text-base  md:w-32 md:h-32 w-16 h-16 p-2 text-center break-words ${
+              className={`bingo-cell flex items-center justify-center border border-gray-400 bg-white shadow-md rounded-md text-[7pt] md:text-base md:w-32 md:h-32 w-16 h-16 p-2 text-center break-words ${
                 rowIndex === 2 && colIndex === 2
                   ? "bg-yellow-300 font-bold"
                   : ""
@@ -117,6 +148,8 @@ const BingoCard1: React.FC = () => {
           ))
         )}
       </div>
+
+      {/* Control Buttons */}
       <div className="flex flex-col items-center mb-8">
         <button
           onClick={handleGenerateNewCard}
@@ -137,27 +170,6 @@ const BingoCard1: React.FC = () => {
           Print Bingo Card
         </button>
       </div>
-      <style jsx>{`
-        @media print {
-          .navbar,
-          button {
-            display: none;
-          }
-          .cards {
-            margin-top: -10rem;
-            margin-bottom: -10rem;
-            width: 100%;
-          }
-          .bingo-cell {
-            width: 1in;
-            height: 1in;
-            font-size: 10pt;
-          }
-          .grid {
-            gap: 0;
-          }
-        }
-      `}</style>
     </div>
   );
 };
