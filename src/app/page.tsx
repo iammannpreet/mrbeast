@@ -3,7 +3,7 @@ import Navbar from "../shared/navbar";
 import Landing from "@/shared/landing";
 import Offer from "@/shared/offerSection";
 import KnowThem from "@/shared/knowThem";
-import ShareIdeasPage from "@/shared/shareIdeaPage";
+import Merch from "@/shared/merch";
 import "../styles/globals.css";
 
 export default function Home() {
@@ -12,6 +12,7 @@ export default function Home() {
       <Navbar />
       <Landing />
       <Offer />
+      <Merch />
       <KnowThem />
       <Footer />
     </main>
