@@ -101,15 +101,17 @@ function Landing() {
             <b>Join the Challenge</b>
           </span>
         </Button>
-        {/* "Your Ideas" Button */}
-        <Button
-          variant="green"
-          size="md"
-          shape="pill"
-          onClick={() => router.push("/bingo-card")}
-        >
-          Create Bingo
-        </Button>
+
+        <div className="pt-4">
+          <Button
+            variant="green"
+            size="md"
+            shape="pill"
+            onClick={() => router.push("/bingo-card")}
+          >
+            <b>Create Bingo!</b>
+          </Button>
+        </div>
       </div>
     </div>
   );
