@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { gsap } from "gsap";
 import Navbar from "../navbar";
 
@@ -52,17 +52,21 @@ const BingoCard1: React.FC = () => {
   };
 
   const [bingoGrid, setBingoGrid] = useState<string[][]>([]);
+  const [isEditMode, setIsEditMode] = useState<boolean>(false);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setBingoGrid(generateRandomCard());
   }, []);
 
   const animateCard = () => {
-    gsap.fromTo(
-      ".bingo-cell",
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.5, stagger: 0.05 }
-    );
+    if (!isEditMode && cardRef.current) {
+      gsap.fromTo(
+        cardRef.current.querySelectorAll(".bingo-cell"),
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.5, stagger: 0.05 }
+      );
+    }
   };
 
   const handleGenerateNewCard = () => {
@@ -70,8 +74,18 @@ const BingoCard1: React.FC = () => {
     animateCard();
   };
 
+  const handleCellChange = (
+    value: string,
+    rowIndex: number,
+    colIndex: number
+  ) => {
+    const updatedGrid = [...bingoGrid];
+    updatedGrid[rowIndex][colIndex] = value;
+    setBingoGrid(updatedGrid);
+  };
+
   return (
-    <div ref={animateCard} className="text-center font-sans">
+    <div ref={cardRef} className="text-center font-sans">
       <Navbar />
       <h1 className="mt-4 text-3xl font-bold mb-6 text-blue-600">
         MrBeast Bingo Card
@@ -87,7 +101,18 @@ const BingoCard1: React.FC = () => {
                   : ""
               }`}
             >
-              {cell}
+              {isEditMode && !(rowIndex === 2 && colIndex === 2) ? (
+                <input
+                  type="text"
+                  value={cell}
+                  onChange={(e) =>
+                    handleCellChange(e.target.value, rowIndex, colIndex)
+                  }
+                  className="w-full h-full text-center border-none focus:outline-none"
+                />
+              ) : (
+                cell
+              )}
             </div>
           ))
         )}
@@ -98,6 +123,12 @@ const BingoCard1: React.FC = () => {
           className="max-w-[12rem] mt-6 px-6 py-2 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 transition"
         >
           Generate New Card
+        </button>
+        <button
+          onClick={() => setIsEditMode(!isEditMode)}
+          className="max-w-[12rem] mt-4 px-6 py-2 bg-purple-500 text-white rounded-lg shadow-lg hover:bg-purple-600 transition"
+        >
+          {isEditMode ? "Save Custom Card" : "Create Your Own Card"}
         </button>
         <button
           onClick={() => window.print()}
