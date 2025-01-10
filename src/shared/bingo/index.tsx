@@ -74,7 +74,7 @@ const BingoCard1: React.FC = () => {
   return (
     <div ref={animateCard} className="text-center font-sans">
       <Navbar />
-      <h1 className="text-3xl font-bold mb-6 text-blue-600">
+      <h1 className="mt-4 text-3xl font-bold mb-6 text-blue-600">
         MrBeast Bingo Card
       </h1>
       <div className="grid grid-cols-5 gap-2 max-w-lg mx-auto">
