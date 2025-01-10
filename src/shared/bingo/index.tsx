@@ -72,7 +72,7 @@ const BingoCard1: React.FC = () => {
   };
 
   return (
-    <div className="text-center font-sans">
+    <div ref={animateCard} className="text-center font-sans">
       <Navbar />
       <h1 className="text-3xl font-bold mb-6 text-blue-600">
         MrBeast Bingo Card
