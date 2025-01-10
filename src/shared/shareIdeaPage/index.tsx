@@ -22,35 +22,50 @@ interface Story {
 const ShareIdeasPage: React.FC = () => {
   const [stories, setStories] = useState<Story[]>([]);
 
-  // Load existing stories from the JSON file
   useEffect(() => {
-    fetch("/data/stories.json")
+    fetch("/api/stories/getStories")
       .then((res) => res.json())
       .then((data) => setStories(data))
       .catch((err) => console.error("Error loading stories:", err));
   }, []);
 
-  // Handle new story submission
-  const handleNewIdea = (ideaContent: string) => {
-    const newStory: Story = {
-      id: stories.length + 1,
-      user: "Anonymous",
+  const handleNewIdea = async (userName: string, ideaContent: string) => {
+    const newStory = {
+      user: userName,
       content: ideaContent,
-      likes: 0,
-      comments: 0,
-      commentList: [],
     };
 
-    setStories((prevStories) => [newStory, ...prevStories]);
+    // Optimistically update the UI
+    setStories((prevStories) => [
+      {
+        ...newStory,
+        likes: 0,
+        comments: 0,
+        commentList: [],
+        id: Date.now(),
+      },
+      ...prevStories,
+    ]);
 
-    fetch("/api/saveStory", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newStory),
-    }).catch((err) => console.error("Failed to save story:", err));
+    // Save to MongoDB
+    try {
+      const response = await fetch("/api/stories/saveStory", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newStory),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) throw new Error(data.error);
+
+      console.log("Story saved to MongoDB:", data);
+    } catch (error) {
+      console.error("Failed to save story:", error);
+    }
   };
 
-  // Handle Like Action
+  // ✅ Fix Like Action
   const handleLike = (id: number) => {
     const updatedStories = stories.map((story) =>
       story.id === id ? { ...story, likes: story.likes + 1 } : story
@@ -58,17 +73,17 @@ const ShareIdeasPage: React.FC = () => {
 
     setStories(updatedStories);
 
-    // Save updated story to the server
     const updatedStory = updatedStories.find((story) => story.id === id);
 
-    fetch("/api/saveStory", {
+    // ✅ Correct API endpoint
+    fetch("/api/stories/saveStory", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedStory),
     }).catch((err) => console.error("Failed to save like:", err));
   };
 
-  // Handle Comment Action
+  // ✅ Fix Comment Action
   const handleComment = (id: number) => {
     const comment = prompt("Enter your comment:");
     if (comment && comment.trim() !== "") {
@@ -84,10 +99,10 @@ const ShareIdeasPage: React.FC = () => {
 
       setStories(updatedStories);
 
-      // Save updated story to the server
       const updatedStory = updatedStories.find((story) => story.id === id);
 
-      fetch("/api/saveStory", {
+      // ✅ Correct API endpoint
+      fetch("/api/stories/saveStory", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedStory),
@@ -177,6 +192,7 @@ const ShareIdeasPage: React.FC = () => {
           <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
             Share Your Idea
           </h2>
+          {/* Pass the updated handleNewIdea to MyComponent */}
           <MyComponent onSubmit={handleNewIdea} />
         </div>
       </div>
