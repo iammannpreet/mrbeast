@@ -16,17 +16,29 @@ interface Story {
   content: string;
   likes: number;
   comments: number;
-  commentList?: string[]; // To store actual comments
+  commentList?: string[];
 }
 
 const ShareIdeasPage: React.FC = () => {
   const [stories, setStories] = useState<Story[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
+  // ✅ Updated useEffect with data validation
   useEffect(() => {
     fetch("/api/stories/getStories")
       .then((res) => res.json())
-      .then((data) => setStories(data))
-      .catch((err) => console.error("Error loading stories:", err));
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setStories(data);
+        } else {
+          console.warn("⚠️ Expected an array but got:", data);
+          setStories([]);
+        }
+      })
+      .catch((err) => {
+        console.error("❌ Error loading stories:", err);
+        setError("Failed to load stories.");
+      });
   }, []);
 
   const handleNewIdea = async (userName: string, ideaContent: string) => {
@@ -35,7 +47,6 @@ const ShareIdeasPage: React.FC = () => {
       content: ideaContent,
     };
 
-    // Optimistically update the UI
     setStories((prevStories) => [
       {
         ...newStory,
@@ -47,7 +58,6 @@ const ShareIdeasPage: React.FC = () => {
       ...prevStories,
     ]);
 
-    // Save to MongoDB
     try {
       const response = await fetch("/api/stories/saveStory", {
         method: "POST",
@@ -59,11 +69,10 @@ const ShareIdeasPage: React.FC = () => {
 
       if (!response.ok) throw new Error(data.error);
     } catch (error) {
-      console.error("Failed to save story:", error);
+      console.error("❌ Failed to save story:", error);
     }
   };
 
-  // ✅ Fix Like Action
   const handleLike = (id: number) => {
     const updatedStories = stories.map((story) =>
       story.id === id ? { ...story, likes: story.likes + 1 } : story
@@ -73,15 +82,13 @@ const ShareIdeasPage: React.FC = () => {
 
     const updatedStory = updatedStories.find((story) => story.id === id);
 
-    // ✅ Correct API endpoint
     fetch("/api/stories/saveStory", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedStory),
-    }).catch((err) => console.error("Failed to save like:", err));
+    }).catch((err) => console.error("❌ Failed to save like:", err));
   };
 
-  // ✅ Fix Comment Action
   const handleComment = (id: number) => {
     const comment = prompt("Enter your comment:");
     if (comment && comment.trim() !== "") {
@@ -99,12 +106,11 @@ const ShareIdeasPage: React.FC = () => {
 
       const updatedStory = updatedStories.find((story) => story.id === id);
 
-      // ✅ Correct API endpoint
       fetch("/api/stories/saveStory", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedStory),
-      }).catch((err) => console.error("Failed to save comment:", err));
+      }).catch((err) => console.error("❌ Failed to save comment:", err));
     }
   };
 
@@ -114,75 +120,76 @@ const ShareIdeasPage: React.FC = () => {
       <section className="max-w-[100%] 2xl:max-w-[80%] mx-auto max-h-[1800px]">
         <h1 className={styles.blockTitle}>Top Stories</h1>
 
-        <Swiper
-          modules={[Autoplay, EffectCoverflow]}
-          slidesPerView={1.3}
-          centeredSlides
-          loop
-          effect={"coverflow"}
-          coverflowEffect={{
-            rotate: 50,
-            stretch: 0,
-            depth: 100,
-            modifier: 1,
-            slideShadows: false,
-          }}
-          preventClicks={false}
-          preventClicksPropagation={false}
-          breakpoints={{
-            480: { slidesPerView: 1.5 },
-            640: { slidesPerView: 1.8 },
-            768: { slidesPerView: 2.5 },
-            1024: { slidesPerView: 3.1 },
-            1280: { slidesPerView: 3.6 },
-            1536: { slidesPerView: 3.4 },
-          }}
-        >
-          {stories.map(
-            ({ id, user, content, likes, comments, commentList }) => (
-              <SwiperSlide key={id} className="flex justify-center">
-                <div className="p-6 bg-white shadow-lg rounded-lg flex flex-col space-y-2 max-w-[18rem] 2xl:max-w-[20rem] h-[20rem] overflow-hidden">
-                  <div className="text-gray-700 font-semibold text-lg">
-                    {user}
-                  </div>
-                  <div
-                    className="text-gray-600 overflow-hidden"
-                    dangerouslySetInnerHTML={{ __html: content }}
-                  />
-                  <div className="flex justify-between items-center text-sm text-gray-500">
-                    {/* 👍 Like Button */}
-                    <button
-                      className="flex items-center space-x-1 hover:text-blue-500"
-                      onClick={() => handleLike(id)}
-                    >
-                      <span>👍</span>
-                      <span>{likes}</span>
-                    </button>
-
-                    {/* 💬 Comment Button */}
-                    <button
-                      className="flex items-center space-x-1 hover:text-blue-500"
-                      onClick={() => handleComment(id)}
-                    >
-                      <span>💬</span>
-                      <span>{comments}</span>
-                    </button>
-                  </div>
-
-                  {/* Display Recent Comments */}
-                  {commentList && commentList.length > 0 && (
-                    <div className="mt-2 text-xs text-gray-600 overflow-y-auto max-h-[60px]">
-                      <strong>Comments:</strong>
-                      {commentList.slice(-3).map((comment, idx) => (
-                        <p key={idx}>- {comment}</p>
-                      ))}
+        {error ? (
+          <p className="text-center text-red-600">{error}</p>
+        ) : (
+          <Swiper
+            modules={[Autoplay, EffectCoverflow]}
+            slidesPerView={1.3}
+            centeredSlides
+            loop
+            effect={"coverflow"}
+            coverflowEffect={{
+              rotate: 50,
+              stretch: 0,
+              depth: 100,
+              modifier: 1,
+              slideShadows: false,
+            }}
+            preventClicks={false}
+            preventClicksPropagation={false}
+            breakpoints={{
+              480: { slidesPerView: 1.5 },
+              640: { slidesPerView: 1.8 },
+              768: { slidesPerView: 2.5 },
+              1024: { slidesPerView: 3.1 },
+              1280: { slidesPerView: 3.6 },
+              1536: { slidesPerView: 3.4 },
+            }}
+          >
+            {stories.map(
+              ({ id, user, content, likes, comments, commentList }) => (
+                <SwiperSlide key={id} className="flex justify-center">
+                  <div className="p-6 bg-white shadow-lg rounded-lg flex flex-col space-y-2 max-w-[18rem] 2xl:max-w-[20rem] h-[20rem] overflow-hidden">
+                    <div className="text-gray-700 font-semibold text-lg">
+                      {user}
                     </div>
-                  )}
-                </div>
-              </SwiperSlide>
-            )
-          )}
-        </Swiper>
+                    <div
+                      className="text-gray-600 overflow-hidden"
+                      dangerouslySetInnerHTML={{ __html: content }}
+                    />
+                    <div className="flex justify-between items-center text-sm text-gray-500">
+                      <button
+                        className="flex items-center space-x-1 hover:text-blue-500"
+                        onClick={() => handleLike(id)}
+                      >
+                        <span>👍</span>
+                        <span>{likes}</span>
+                      </button>
+
+                      <button
+                        className="flex items-center space-x-1 hover:text-blue-500"
+                        onClick={() => handleComment(id)}
+                      >
+                        <span>💬</span>
+                        <span>{comments}</span>
+                      </button>
+                    </div>
+
+                    {commentList && commentList.length > 0 && (
+                      <div className="mt-2 text-xs text-gray-600 overflow-y-auto max-h-[60px]">
+                        <strong>Comments:</strong>
+                        {commentList.slice(-3).map((comment, idx) => (
+                          <p key={idx}>- {comment}</p>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </SwiperSlide>
+              )
+            )}
+          </Swiper>
+        )}
       </section>
 
       <div className="items-center flex justify-center">
@@ -190,7 +197,6 @@ const ShareIdeasPage: React.FC = () => {
           <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
             Share Your Idea
           </h2>
-          {/* Pass the updated handleNewIdea to MyComponent */}
           <MyComponent onSubmit={handleNewIdea} />
         </div>
       </div>
