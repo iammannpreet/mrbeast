@@ -12,8 +12,6 @@ export default function Home() {
       <Navbar />
       <Landing />
       <Offer />
-      <Merch />
-      <KnowThem />
       <Footer />
     </main>
   );
