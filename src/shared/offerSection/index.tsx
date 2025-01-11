@@ -1,6 +1,26 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useRef } from "react";
+import { gsap } from "gsap";
 
 function Offer() {
+  // Ref for the sidebar animation
+  const sidebarRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Sidebar animation: slide in from the right
+    gsap.fromTo(
+      sidebarRef.current,
+      { x: 300, opacity: 0 }, // Start off-screen
+      {
+        x: 0,
+        opacity: 1,
+        duration: 1,
+        ease: "power3.out",
+      }
+    );
+  }, []);
+
   return (
     <div className="md:flex max-w-5xl mx-auto md:gap-8 px-8">
       {/* Features Section */}
@@ -67,8 +87,11 @@ function Offer() {
         </div>
       </div>
 
-      {/* Sidebar Section */}
-      <div className="hidden md:max-w-[30%] md:block mt-8 items-center bg-white rounded-lg shadow-lg p-6">
+      {/* Sidebar Section with GSAP Animation */}
+      <div
+        ref={sidebarRef}
+        className="hidden md:max-w-[30%] md:block mt-8 items-center bg-white rounded-lg shadow-lg p-6"
+      >
         <h1 className="text-3xl font-semibold text-black">
           Be Part of the MrBeast Movement
         </h1>
@@ -79,7 +102,9 @@ function Offer() {
 
         <div className="mt-4">
           <button className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 transition duration-300">
-            <a href="https://discord.gg/kh47QcXN">Join Us on Discord 💬</a>
+            <a href="https://discord.gg/kh47QcXN" target="_blank">
+              Join Us on Discord 💬
+            </a>
           </button>
         </div>
 
