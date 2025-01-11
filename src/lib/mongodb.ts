@@ -1,18 +1,21 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, MongoClientOptions } from "mongodb";
 
 const uri = process.env.MONGODB_URI;
-const options = {};
+const options: MongoClientOptions = {
+  serverSelectionTimeoutMS: 5000, // ⏳ 5-second timeout
+};
 
 let client: MongoClient;
 let clientPromise: Promise<MongoClient>;
 
-// ✅ Add console logging for debugging
 const globalForMongo = globalThis as typeof globalThis & {
   _mongoClientPromise?: Promise<MongoClient>;
 };
 
 if (!uri) {
-  throw new Error("MongoDB URI is missing! Please define MONGODB_URI in .env");
+  throw new Error(
+    "❌ MongoDB URI is missing! Please define MONGODB_URI in .env"
+  );
 }
 
 try {
@@ -21,8 +24,6 @@ try {
       console.log("🔄 Connecting to MongoDB in Development...");
       client = new MongoClient(uri, options);
       globalForMongo._mongoClientPromise = client.connect();
-    } else {
-      console.log("✅ Reusing MongoDB connection in Development");
     }
     clientPromise = globalForMongo._mongoClientPromise!;
   } else {
