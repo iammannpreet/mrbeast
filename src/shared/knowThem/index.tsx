@@ -1,6 +1,11 @@
 "use client";
-
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  useMemo,
+} from "react";
 import Image from "next/image";
 import { gsap } from "gsap";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -13,54 +18,64 @@ function KnowThem() {
   const headingRef = useRef<HTMLHeadingElement>(null);
   const paragraphRef = useRef<HTMLParagraphElement>(null);
 
-  // Cards with multiple random facts for each team member
-  const cards = [
-    {
-      id: 1,
-      image: "/images/chandler.webp",
-      title: "Chandler",
-      facts: [
-        "Chandler started as a janitor for MrBeast.",
-        "He is terrible at food challenges!",
-        "Chandler once said he’s afraid of pickles.",
-      ],
-    },
-    {
-      id: 2,
-      image: "/images/jimm.webp",
-      title: "Jimmy (MrBeast)",
-      facts: [
-        "Jimmy started YouTube at 13 years old.",
-        "He co-founded Team Trees and Team Seas.",
-        "Jimmy has donated over $100 million in giveaways.",
-      ],
-    },
-    {
-      id: 3,
-      image: "/images/karl.jpeg",
-      title: "Karl",
-      facts: [
-        "Karl was originally a cameraman for MrBeast.",
-        "He streams Minecraft on Twitch.",
-        "Karl loves storytelling and comics.",
-      ],
-    },
-    {
-      id: 4,
-      image: "/images/kris.webp",
-      title: "Ava Kris",
-      facts: [
-        "Ava Kris was part of MrBeast's first viral videos.",
-        "She recently came out as transgender.",
-        "Kris loves participating in wild challenges.",
-      ],
-    },
-  ];
+  // ✅ Memoize the cards array to prevent re-creation on each render
+  const cards = useMemo(
+    () => [
+      {
+        id: 1,
+        image: "/images/chandler.webp",
+        title: "Chandler",
+        facts: [
+          "Chandler started as a janitor for MrBeast.",
+          "He is terrible at food challenges!",
+          "Chandler once said he’s afraid of pickles.",
+        ],
+      },
+      {
+        id: 2,
+        image: "/images/jimm.webp",
+        title: "Jimmy (MrBeast)",
+        facts: [
+          "Jimmy started YouTube at 13 years old.",
+          "He co-founded Team Trees and Team Seas.",
+          "Jimmy has donated over $100 million in giveaways.",
+        ],
+      },
+      {
+        id: 3,
+        image: "/images/karl.jpeg",
+        title: "Karl",
+        facts: [
+          "Karl was originally a cameraman for MrBeast.",
+          "He streams Minecraft on Twitch.",
+          "Karl loves storytelling and comics.",
+        ],
+      },
+      {
+        id: 4,
+        image: "/images/kris.webp",
+        title: "Ava Kris",
+        facts: [
+          "Ava Kris was part of MrBeast's first viral videos.",
+          "She recently came out as transgender.",
+          "Kris loves participating in wild challenges.",
+        ],
+      },
+    ],
+    []
+  ); // ✅ Empty dependency array ensures this is created only once
 
-  // State to store random facts for each card
   const [randomFacts, setRandomFacts] = useState<string[]>([]);
 
-  // GSAP animations for heading and paragraph
+  // ✅ Memoize generateRandomFacts to avoid infinite loop
+  const generateRandomFacts = useCallback(() => {
+    const selectedFacts = cards.map((card) => {
+      const randomIndex = Math.floor(Math.random() * card.facts.length);
+      return card.facts[randomIndex];
+    });
+    setRandomFacts(selectedFacts);
+  }, [cards]);
+
   useEffect(() => {
     gsap.from(headingRef.current, {
       y: -50,
@@ -77,18 +92,8 @@ function KnowThem() {
       ease: "power3.out",
     });
 
-    // Generate random facts when the component mounts
     generateRandomFacts();
-  }, []);
-
-  // Function to select a random fact for each card
-  const generateRandomFacts = () => {
-    const selectedFacts = cards.map((card) => {
-      const randomIndex = Math.floor(Math.random() * card.facts.length);
-      return card.facts[randomIndex];
-    });
-    setRandomFacts(selectedFacts);
-  };
+  }, [generateRandomFacts]);
 
   return (
     <div className="max-w-[1400px] mx-auto px-4 py-8 text-center">
@@ -123,7 +128,11 @@ function KnowThem() {
             768: { slidesPerView: 2 },
             1024: { slidesPerView: 3 },
           }}
-          onSlideChange={() => generateRandomFacts()} // Regenerate facts on slide change
+          onSlideChange={(swiper) => {
+            if (swiper.isEnd) {
+              generateRandomFacts(); // ✅ Trigger only when the loop ends
+            }
+          }}
         >
           {cards.map((card, index) => (
             <SwiperSlide key={card.id}>

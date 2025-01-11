@@ -18,7 +18,12 @@ export default async function handler(
       const db = client.db("MrBeast");
       const storiesCollection = db.collection("Stories");
 
-      const updatedFields: any = {};
+      interface UpdatedFields {
+        likes?: number;
+        comments?: number;
+        commentList?: string[];
+      }
+      const updatedFields: UpdatedFields = {};
       if (likes !== undefined) updatedFields.likes = likes;
       if (comments !== undefined) updatedFields.comments = comments;
       if (commentList !== undefined) updatedFields.commentList = commentList;
@@ -33,7 +38,12 @@ export default async function handler(
       }
 
       res.status(200).json({ message: "Story updated successfully." });
-    } catch (error) {
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("Error updating story:", error.message); // Logs the error message
+      } else {
+        console.error("Unknown error occurred while updating story.");
+      }
       res.status(500).json({ error: "Failed to update story." });
     }
   } else {

@@ -85,8 +85,8 @@ function Landing() {
             }}
             className="text-lg text-white mt-4"
           >
-            Think you’ve got what it takes? Dive into epic challenges, make
-            predictions, and prove you're the ultimate MrBeast fan.
+            Think you&apos;ve got what it takes? Dive into epic challenges, make
+            predictions, and prove you&apos;re the ultimate MrBeast fan.
           </p>
         </div>
         <Button

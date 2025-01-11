@@ -7,7 +7,7 @@ import { gsap } from "gsap";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-
+import Image from "next/image";
 const merchItems = [
   {
     id: 1,
@@ -84,9 +84,11 @@ const Merch: React.FC = () => {
         {merchItems.map((item) => (
           <SwiperSlide key={item.id}>
             <div className="relative group overflow-hidden rounded-xl shadow-lg bg-white p-4">
-              <img
+              <Image
                 src={item.image}
                 alt={item.name}
+                width={300} // ✅ Set width for optimization
+                height={256} // ✅ Set height for optimization
                 className="w-full h-64 object-cover rounded-md group-hover:scale-105 transition-transform duration-300"
               />
               <h3 className="mt-4 text-lg font-semibold text-gray-800">

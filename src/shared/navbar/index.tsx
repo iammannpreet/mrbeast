@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Dialog from "../ui/Dialog";
 import { Button } from "../ui/Button";
 import QuizGame from "../quizgame";
+import Link from "next/link";
 
 export default function Navbar() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -25,9 +26,9 @@ export default function Navbar() {
   return (
     <div className="flex flex-col items-center py-4 shadow-md w-full">
       <div className="flex flex-col sm:flex-row max-w-5xl w-full justify-around items-center gap-4 sm:gap-8">
-        <a href="/">
+        <Link href="/" passHref>
           <Image src="/logo.png" alt="logo" width={60} height={100} />
-        </a>
+        </Link>
         {/* "Who Are We?" Button */}
         <Button variant="blue" size="md" shape="rounded" onClick={openDialog}>
           Who Are We?
