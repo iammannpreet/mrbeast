@@ -55,7 +55,7 @@ export default function Navbar() {
           shape="rounded"
           onClick={openQuiz} // Open Quiz Dialog
         >
-          Learn More
+          Take the Quiz
         </Button>
       </div>
 
