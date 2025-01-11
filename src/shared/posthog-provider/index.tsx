@@ -13,7 +13,6 @@ const PostHogProvider = ({ children }: PostHogProviderProps) => {
       person_profiles: "identified_only",
     });
 
-    // ✅ Expose PostHog globally for testing in the browser console
     (window as any).posthog = posthog;
   }
 

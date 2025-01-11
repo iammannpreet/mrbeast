@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import MyComponent from "../shareIdea/index";
-import Navbar from "../navbar";
+import Navbar from "../Navbar";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectCoverflow } from "swiper/modules";
 import "swiper/css";
@@ -58,8 +58,6 @@ const ShareIdeasPage: React.FC = () => {
       const data = await response.json();
 
       if (!response.ok) throw new Error(data.error);
-
-      console.log("Story saved to MongoDB:", data);
     } catch (error) {
       console.error("Failed to save story:", error);
     }

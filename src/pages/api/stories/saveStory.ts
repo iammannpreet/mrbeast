@@ -26,7 +26,6 @@ export default async function handler(
         .status(200)
         .json({ message: "Story saved successfully.", id: result.insertedId });
     } catch (error) {
-      console.error("Error saving story:", error);
       res.status(500).json({ error: "Failed to save story.", details: error });
     }
   } else {

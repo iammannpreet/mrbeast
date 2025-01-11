@@ -34,7 +34,6 @@ export default async function handler(
 
       res.status(200).json({ message: "Story updated successfully." });
     } catch (error) {
-      console.error("Error updating story:", error);
       res.status(500).json({ error: "Failed to update story." });
     }
   } else {
