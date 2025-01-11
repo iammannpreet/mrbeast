@@ -9,7 +9,7 @@ export default async function handler(
 
   try {
     const client = await clientPromise;
-    const db = client.db("mrbeast");
+    const db = client.db("MrBeast");
 
     const stories = await db.collection("Stories").find({}).toArray();
 
