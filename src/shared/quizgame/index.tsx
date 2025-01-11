@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Dialog from "../ui/Dialog";
+import Image from "next/image";
 
 export default function QuizGameDialog() {
   const [isOpen, setIsOpen] = useState(false);
@@ -211,10 +212,13 @@ export default function QuizGameDialog() {
             <h2 className="text-2xl text-black font-bold mb-4">
               You are {result}!
             </h2>
-            <img
+            <Image
               src={`/images/${result.toLowerCase()}.jpg`}
               alt={result}
+              width={500} // ✅ Provide explicit width
+              height={500} // ✅ Provide explicit height
               className="w-full rounded"
+              unoptimized // ✅ Optional if the image is dynamic and in the `public` folder
             />
           </div>
         )}

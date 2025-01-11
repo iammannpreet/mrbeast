@@ -3,24 +3,24 @@ import { MongoClient } from "mongodb";
 const uri = process.env.MONGODB_URI;
 const options = {};
 
-// Extend the NodeJS.Global type
-declare global {
-  let _mongoClientPromise: Promise<MongoClient> | undefined;
-}
-
 let client: MongoClient;
 let clientPromise: Promise<MongoClient>;
+
+// ✅ Directly extend globalThis using type assertion
+const globalForMongo = globalThis as typeof globalThis & {
+  _mongoClientPromise?: Promise<MongoClient>;
+};
 
 if (!uri) {
   throw new Error("MongoDB URI is missing! Please define MONGODB_URI in .env");
 }
 
 if (process.env.NODE_ENV === "development") {
-  if (!global._mongoClientPromise) {
+  if (!globalForMongo._mongoClientPromise) {
     client = new MongoClient(uri, options);
-    global._mongoClientPromise = client.connect();
+    globalForMongo._mongoClientPromise = client.connect();
   }
-  clientPromise = global._mongoClientPromise;
+  clientPromise = globalForMongo._mongoClientPromise!;
 } else {
   client = new MongoClient(uri, options);
   clientPromise = client.connect();
