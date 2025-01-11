@@ -123,7 +123,7 @@ export default function Navbar() {
               Join us on Discord:
             </p>
             <p className="text-blue-600 font-bold text-lg mt-2">
-              <button>Join here</button>
+              <a href="https://discord.gg/kh47QcXN">Join here</a>
             </p>
           </div>
         </div>
