@@ -6,7 +6,6 @@ const options = {};
 let client: MongoClient;
 let clientPromise: Promise<MongoClient>;
 
-// ✅ Directly extend globalThis using type assertion
 const globalForMongo = globalThis as typeof globalThis & {
   _mongoClientPromise?: Promise<MongoClient>;
 };
