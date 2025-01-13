@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import { gsap } from "gsap";
-import Navbar from "../navbar";
+import Navbar from "../Navbar";
 
 interface Episode {
   episode_number: number;
@@ -18,22 +18,31 @@ const BingoCard1: React.FC = () => {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  // Fetch JSON Data on Load
   useEffect(() => {
-    fetch("/data/contentPool.json")
+    fetch("/api/bingo/getBingoData")
       .then((response) => response.json())
       .then((data) => {
-        setEpisodes(data.episodes);
-        // Generate a random card for the default selected episode
-        setBingoGrid(generateRandomCard(data.episodes[0].events));
+        console.log("📦 Fetched Bingo Data:", data); // Debugging log
+
+        // Access the 'episodes' array from the first object in the response
+        if (Array.isArray(data) && data.length > 0 && data[0].episodes) {
+          setEpisodes(data[0].episodes);
+          setBingoGrid(generateRandomCard(data[0].episodes[0].events));
+        } else {
+          console.warn("⚠️ No episodes found:", data);
+        }
       })
-      .catch((error) => console.error("Error loading JSON:", error));
+      .catch((error) => console.error("❌ Error loading bingo data:", error));
   }, []);
 
-  // Generate Random Bingo Card with Unique 24 Events + Free Space
   const generateRandomCard = (contentPool: string[]) => {
+    if (!Array.isArray(contentPool) || contentPool.length === 0) {
+      console.warn("⚠️ contentPool is empty or not an array:", contentPool);
+      return [[]]; // Return an empty grid to prevent crash
+    }
+
     const shuffledContent = [...contentPool].sort(() => Math.random() - 0.5);
-    const selectedEvents = shuffledContent.slice(0, 24); // Pick 24 unique events
+    const selectedEvents = shuffledContent.slice(0, 24);
 
     const grid = Array(5)
       .fill(null)

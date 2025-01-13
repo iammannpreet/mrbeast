@@ -1,5 +1,5 @@
 import Footer from "@/shared/footer";
-import Navbar from "@/shared/navbar";
+import Navbar from "../shared/Navbar/index";
 import Landing from "@/shared/landing";
 import Offer from "@/shared/offerSection";
 import KnowThem from "@/shared/knowThem";
