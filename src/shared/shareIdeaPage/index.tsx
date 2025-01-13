@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import MyComponent from "../shareIdea/index";
-import Navbar from "../Navbar";
+import Navbar from "../navbar";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectCoverflow } from "swiper/modules";
 import "swiper/css";

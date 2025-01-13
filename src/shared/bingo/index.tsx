@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import { gsap } from "gsap";
-import Navbar from "../Navbar";
+import Navbar from "../navbar";
 
 interface Episode {
   episode_number: number;
